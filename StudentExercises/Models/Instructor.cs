@@ -8,7 +8,6 @@ namespace StudentExercises.Models
 {
     public class Instructor
     {
-        [Required]
         public int Id { get; set; }
 
         [Required]
