@@ -79,7 +79,7 @@ namespace StudentExercises.Controllers
         // POST: Instructors/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Instructor instructor)
+        public ActionResult Create(InstructorCreateViewModel model)
         {
             try
             {
@@ -106,11 +106,11 @@ namespace StudentExercises.Controllers
                             )
                         ";
 
-                        cmd.Parameters.AddWithValue("@firstName", instructor.FirstName);
-                        cmd.Parameters.AddWithValue("@lastName", instructor.LastName);
-                        cmd.Parameters.AddWithValue("@slackHandle", instructor.SlackHandle);
-                        cmd.Parameters.AddWithValue("@specialty", instructor.Specialty);
-                        cmd.Parameters.AddWithValue("@cohortId", instructor.CohortId);
+                        cmd.Parameters.AddWithValue("@firstName", model.Instructor.FirstName);
+                        cmd.Parameters.AddWithValue("@lastName", model.Instructor.LastName);
+                        cmd.Parameters.AddWithValue("@slackHandle", model.Instructor.SlackHandle);
+                        cmd.Parameters.AddWithValue("@specialty", model.Instructor.Specialty);
+                        cmd.Parameters.AddWithValue("@cohortId", model.Instructor.CohortId);
 
                         cmd.ExecuteNonQuery();
                     }
@@ -126,6 +126,10 @@ namespace StudentExercises.Controllers
         // GET: Instructors/Edit/5
         public ActionResult Edit(int id)
         {
+            //use GetSingleInstructor to get the Instructor you want to edit
+            //Use GetAllCohorts to get a list of cohorts
+            //pass both the Instructor and the List of Cohorts into an instance of the InstructorEditViewModel
+            //pass the instance of the viewModel into View()
             return View();
         }
 
@@ -137,7 +141,6 @@ namespace StudentExercises.Controllers
             try
             {
                 // TODO: Add update logic here
-
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -149,6 +152,8 @@ namespace StudentExercises.Controllers
         // GET: Instructors/Delete/5
         public ActionResult Delete(int id)
         {
+            //use GetSingleInstructor to get the Instructor you want to delete
+            //pass that instructor into View()
             return View();
         }
 
