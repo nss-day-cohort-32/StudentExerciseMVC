@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using StudentExercises.Models;
+using StudentExercises.Models.ViewModels;
 
 namespace StudentExercises.Controllers
 {
@@ -70,7 +71,9 @@ namespace StudentExercises.Controllers
         // GET: Instructors/Create
         public ActionResult Create()
         {
-            return View();
+            List<Cohort> cohorts = GetAllCohorts();
+            var viewModel = new InstructorCreateViewModel(cohorts);
+            return View(viewModel);
         }
 
         // POST: Instructors/Create
@@ -167,6 +170,32 @@ namespace StudentExercises.Controllers
                     }
                 }
                 return instructor;
+            }
+        }
+        private List<Cohort> GetAllCohorts()
+        {
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "SELECT Id, Name FROM Cohort";
+                    SqlDataReader reader = cmd.ExecuteReader();
+
+                    List<Cohort> cohorts = new List<Cohort>();
+                    while (reader.Read())
+                    {
+                        cohorts.Add(new Cohort
+                        {
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
+                        });
+                    }
+
+                    reader.Close();
+
+                    return cohorts;
+                }
             }
         }
     }
